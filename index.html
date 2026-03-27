@@ -27,7 +27,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 0 0 60px 0;
+      padding: 0 0 env(safe-area-inset-bottom, 60px) 0;
+      padding-bottom: max(60px, env(safe-area-inset-bottom));
+      -webkit-font-smoothing: antialiased;
     }
 
     /* ── HEADER ── */
@@ -35,7 +37,7 @@
       width: 100%;
       max-width: 480px;
       text-align: center;
-      padding: 56px 24px 36px;
+      padding: 48px 24px 32px;
       position: relative;
     }
 
@@ -45,28 +47,24 @@
       width: 40px;
       height: 1px;
       background: var(--gold);
-      margin: 28px auto 0;
+      margin: 24px auto 0;
       opacity: 0.7;
     }
 
-    .brand-label {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 5px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 12px;
+    /* Logo */
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 6px;
     }
 
-    .brand-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 48px;
-      font-weight: 900;
-      letter-spacing: 6px;
-      text-transform: uppercase;
-      color: var(--white);
-      line-height: 1;
+    .logo-img {
+      width: 140px;
+      height: auto;
+      /* inverte o preto pra branco no fundo escuro */
+      filter: invert(1);
+      display: block;
     }
 
     .brand-tagline {
@@ -76,7 +74,7 @@
       letter-spacing: 3.5px;
       text-transform: uppercase;
       color: var(--beige);
-      margin-top: 14px;
+      margin-top: 10px;
       opacity: 0.75;
     }
 
@@ -153,7 +151,8 @@
       align-items: center;
       justify-content: center;
       gap: 12px;
-      padding: 18px 24px;
+      padding: 20px 24px;
+      min-height: 56px; /* touch target mínimo recomendado */
       border-radius: 2px;
       text-decoration: none;
       font-family: 'Montserrat', sans-serif;
@@ -164,6 +163,8 @@
       transition: all 0.25s ease;
       position: relative;
       overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .btn::before {
@@ -310,8 +311,14 @@
 
   <!-- HEADER -->
   <header class="header">
-    <p class="brand-label">Moda Masculina</p>
-    <h1 class="brand-name">Sampaios</h1>
+    <div class="logo-wrap">
+      <img
+        class="logo-img"
+        src="https://raw.githubusercontent.com/sampaiojr1/sampaios/main/logo.png"
+        alt="Sampaios"
+        width="140"
+      >
+    </div>
     <p class="brand-tagline">Atacado — Iracema · CE</p>
   </header>
 
@@ -340,7 +347,7 @@
     <!-- BOTÃO PRINCIPAL — WhatsApp -->
     <a
       class="btn btn-whatsapp"
-      href="https://wa.me/55889811406367?text=Ol%C3%A1%2C+vim+pelo+Instagram+e+gostaria+de+saber+mais+sobre+as+pe%C3%A7as+para+atacado."
+      href="https://wa.me/5588981406367?text=Ol%C3%A1%2C+vim+pelo+Instagram+e+gostaria+de+saber+mais+sobre+as+pe%C3%A7as+para+atacado."
       target="_blank"
       rel="noopener"
     >
