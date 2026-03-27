@@ -39,8 +39,7 @@
       text-align: center;
       padding: 52px 24px 36px;
       position: relative;
-      /* gradiente radial dourado sutil — aquecimento premium */
-      background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(201,169,110,0.10) 0%, transparent 70%);
+      overflow: hidden;
     }
 
     /* Logo — protagonismo total */
@@ -52,26 +51,28 @@
       margin-bottom: 10px;
     }
 
-    /* halo dourado atrás da logo */
-    .logo-wrap::before {
-      content: '';
+    /* contorno da logo como watermark de fundo */
+    .logo-outline-bg {
       position: absolute;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(201,169,110,0.13) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 340px;
+      height: auto;
+      filter: url(#logo-outline-filter);
+      opacity: 0.22;
+      mix-blend-mode: screen;
       pointer-events: none;
+      z-index: 0;
     }
 
     .logo-img {
       width: 200px;
       height: auto;
-      filter: invert(1);
+      filter: invert(1) drop-shadow(0 2px 12px rgba(0,0,0,0.5));
       display: block;
       position: relative;
       z-index: 1;
-      /* leve brilho dourado na logo */
-      filter: invert(1) drop-shadow(0 0 18px rgba(201,169,110,0.25));
     }
 
     .brand-tagline {
@@ -408,9 +409,50 @@
 </head>
 <body>
 
+  <!-- FILTRO SVG: extrai exatamente o contorno da logo, coloriza em dourado -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden">
+    <defs>
+      <filter id="logo-outline-filter" x="-25%" y="-25%" width="150%" height="150%"
+              color-interpolation-filters="sRGB">
+        <!-- 1. Converte para escala de cinza -->
+        <feColorMatrix type="saturate" values="0" result="gray"/>
+        <!-- 2. Inverte: logo fica branca, fundo preto -->
+        <feComponentTransfer in="gray" result="inv">
+          <feFuncR type="linear" slope="-1" intercept="1"/>
+          <feFuncG type="linear" slope="-1" intercept="1"/>
+          <feFuncB type="linear" slope="-1" intercept="1"/>
+        </feComponentTransfer>
+        <!-- 3. Dilata a logo (expande as bordas) -->
+        <feMorphology operator="dilate" radius="5" in="inv" result="dilated"/>
+        <!-- 4. Erode a logo (encolhe as bordas) -->
+        <feMorphology operator="erode" radius="5" in="inv" result="eroded"/>
+        <!-- 5. Subtrai eroded do dilated → fica só o contorno (anel) -->
+        <feComposite in="dilated" in2="eroded"
+                     operator="arithmetic" k1="0" k2="1" k3="-1" k4="0"
+                     result="ring"/>
+        <!-- 6. Coloriza o contorno em dourado (#C9A96E) -->
+        <feColorMatrix type="matrix"
+          values="0.788 0 0 0 0
+                  0.663 0 0 0 0
+                  0.431 0 0 0 0
+                  0     0 0 0 1"
+          in="ring"/>
+      </filter>
+    </defs>
+  </svg>
+
   <!-- HEADER -->
   <header class="header">
     <div class="logo-wrap">
+      <!-- contorno dourado da logo como fundo (mesmas linhas, só o traço) -->
+      <img
+        class="logo-outline-bg"
+        src="https://raw.githubusercontent.com/sampaiojr1/sampaios/main/logo.png"
+        alt=""
+        aria-hidden="true"
+        width="340"
+      >
+      <!-- logo principal em branco no topo -->
       <img
         class="logo-img"
         src="https://raw.githubusercontent.com/sampaiojr1/sampaios/main/logo.png"
